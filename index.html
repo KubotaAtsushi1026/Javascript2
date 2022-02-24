@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>会員登録サイト</title>
+    </head>
+    <body>
+        <h1 id="h1">会員登録サイト</h1>
+        お名前: <input type="text" id="name"><span id="name_error"></span><br>
+        年齢: <input type="text" id="age"><span id="age_error"></span><br>
+        <button id="add">登録</button>
+        <div id="all_users"></div>
+        <script>
+           // ユーザーの設計図を作る
+           class User{
+               // プロパティ（変数）
+               name; // 
+               age; // 年齢
+               // コンストラクタ
+               constructor(name,age){
+                   // プロパティに値をセット
+                   this.name = name;
+                   this.age = age;
+                   console.log(this.name + 'さんが生まれた');
+               }
+               // お酒を飲むメソッド（関数）
+               drink(){
+                   // 20歳以上ならば
+                   if(this.age >= 20){
+                       console.log(this.name + 'さん、お酒をお楽しみください');
+                   }else{ // 20歳未満ならば
+                       console.log(this.name + 'さん、お酒は20歳から');
+                       console.log('あと' + (20 - this.age) + '年お待ちください');
+                   }               }
+                // 誰か（someone）と会話するメソッド
+               talk(someone){ // someoneは引数
+                    console.log(this.name + 'さんが' + someone.name + 'さんに話しかけた');
+                    console.log('お前さん、' + someone.age + '歳かよ！');
+                }
+           }
+           
+        //   // 全ユーザーを保存する配列
+           let users = [];
+           
+           // 初期データを生成するメソッド
+           const init = () => {
+           // 久保田さん、誕生(オブジェクト、インスタンス)
+           let kubota = new User('久保田',20);
+           // 島さん誕生
+           let shima = new User('島',18);
+        //   // 久保田さん、お酒を飲む
+        //   kubota.drink();
+        //   // 島さん、お酒を飲む
+        //   shima.drink();
+        //   // 久保田さんが島さんに話しかける
+        //   kubota.talk(shima);
+        //   // 島さんが久保田さんに話しかける
+        //   shima.talk(kubota);
+           
+           let yamada = new User('山田',100);
+           users.push(kubota);
+           users.push(shima);
+           users.push(yamada);
+           
+               
+           }
+         // initメソッドの実行
+           init();
+         
+         // ユーザー全員を画面に表示するメソッド
+         const disp_users = (users) => { 
+             // id="all_users"のタブに命を与える
+             let all_users = document.getElementById('all_users');
+             // <div>タグの中をいったん空にする
+             all_users.innerHTML = '';
+             
+             // console.log(all_users);
+             users.forEach((user) => {
+            // 新規ulタグの命を作り出す
+            // <ul></ul>
+            let ul = document.createElement('ul');
+            // <li></li>
+            let li_name = document.createElement('li');
+            // <li>久保田</li>
+            li_name.textContent = user.name;
+            // <li>20歳</li>
+            let li_age = document.createElement('li');
+            li_age.textContent = user.age + '歳';
+           
+            // <ul>
+            //       <li>久保田</li>
+            //       <li>20歳</li>
+            //   </ul>
+            ul.appendChild(li_name);
+            ul.appendChild(li_age);
+              // <div id="all_users">
+            // <ul>
+            //       <li>久保田</li>
+            //       <li>20歳</li>
+            //   </ul>
+            // </div>
+            all_users.appendChild(ul);
+            
+        });
+             
+         }
+         // disp_usersメソッドを実行
+         disp_users(users);
+         
+         // id="add"のタグに命を与える
+         const button = document.getElementById('add');
+         // ボタンが押された時の処理
+         button.addEventListener('click',function(){
+             // alert('押された');
+             // 入力された名前を取得
+             const name = document.getElementById('name');
+             let input_name = name.value;
+             name.value = '';
+             console.log(input_name);
+             // 入力された年齢を取得
+             const age = document.getElementById('age');
+             let input_age = age.value;
+             age.value = '';
+             console.log(input_age);
+             
+             let flag = true;
+             
+                const name_error =document.getElementById('name_error');
+                const age_error =document.getElementById('age_error');
+             // エラーメッセージをいったん削除
+                name_error.textContent = '';
+                age_error.textContent = '';
+             // 名前が入力されていなければ
+             if(input_name === ''){
+              
+                 name_error.textContent ='お名前を入力してください';
+                 flag = false;
+             }
+             
+             // 年齢が入力されていなければ
+              if(input_age === ''){
+                 age_error.textContent ='年齢を入力してください';
+                 flag = false;
+             }else if(!/^[0-9]+$/.test(input_age)){ //入力された値が正の整数でなければ
+                 age_error.textContent ='年齢を正の整数で入力してください';
+                 flag = false;
+             }
+             
+             // 入力エラーが一つもなかった得
+             if(flag === true){
+             // 新しいユーザー作成
+             let new_user = new User(input_name, input_age);
+             users.push(new_user);
+             disp_users(users);
+                 
+             }
+             
+             
+            //  let name = 
+         });
+         
+         
+        //<h1>に命を与える
+        const h1 = document.getElementById('h1');
+        h1.style.color = 'red';
+        h1.style.backgroundColor = 'skyblue';
+           
+        //   console.log(users);
+           
+           // 繰り返し構文
+        //   users.forEach((user) => {
+        //       console.log(user.name);
+        //       console.log(user.age + '歳');
+        //       user.drink();
+        //   });
+        
+       
+        </script>
+    </body>
+</html>
